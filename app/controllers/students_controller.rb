@@ -1,13 +1,12 @@
 class StudentsController < ApplicationController
 
   def index
-    if params[:name].blank?
+    if params[:name].present?
+      students = Student.select { |s| s.values_at("first_name", "last_name").include? params[:name].capitalize }
+    else 
       students = Student.all
-      render json: students
-    elsif 
-      student = Student.find_by(last_name: params[:name].capitalize)
-      render json: student
     end
+    render json: students
   end
 
   def show
